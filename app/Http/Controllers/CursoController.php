@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\storeCursoRequest;
 use App\Models\Curso;
 use Illuminate\Http\Request;
 
@@ -37,8 +38,14 @@ class CursoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(storeCursoRequest $request,)
     {
+        // $validacionDatos= $request->validate([
+        //     'nombre'=>'required|max:10',
+        //     'descripcion'=>'required|max:99',
+        //     'duracion'=>'integer|max:5',
+        //     'imagen'=>'required|image'
+        // ]);
         //return $request->all();
         $cursito = new Curso();//crear una instancia de la clase Curso
         $cursito->nombre=$request->input('nombre');
@@ -46,10 +53,13 @@ class CursoController extends Controller
         if($request->hasFile('imagen')){
             $cursito->imagen = $request->file('imagen')->store('public/cursos');
         }
+
         $cursito->duracion=$request->input('duracion');
         $cursito->save();//save registra la informacion en la BD
         return 'Guardado exitosamente';
         //return $request->input('nombre');
+
+
     }
 
     /**
@@ -107,6 +117,17 @@ class CursoController extends Controller
      */
     public function destroy($id)
     {
-        //
+         $cursito = Curso::find($id);
+        // return $cursito;
+
+        $urlImagenBD = $cursito->imagen;
+        // return $urlImagenBD;
+
+        $nombreImagen = str_replace('public/','\storage\\',$urlImagenBD);
+        // return $nombreImagen;
+        $rutaCompleta = public_path().$nombreImagen;
+        unlink($rutaCompleta);
+        $cursito->delete();
+        return 'Eliminado';
     }
 }

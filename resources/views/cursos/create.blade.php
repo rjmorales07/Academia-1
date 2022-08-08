@@ -5,6 +5,18 @@
 @section('contenido')
     <form action="/curso" method="POST" enctype="multipart/form-data">
         @csrf
+
+        @if ($errors->any())
+            @foreach ($errors->all() as $alerta)
+                <div class="alert alert-primary" role="alert">
+                    <ul>
+                        <li>{{$alerta}}</li>
+                    </ul>
+                </div>
+            @endforeach
+
+        @endif
+
         <br>
         <h2>Aqui puedes crear un nuevo curso</h2>
         <div class="form-group">
