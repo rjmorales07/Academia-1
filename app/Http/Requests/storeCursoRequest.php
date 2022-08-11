@@ -31,6 +31,7 @@ class storeCursoRequest extends FormRequest
                 'imagen'=>'Mimetypes:mp4'
 
                 // 'imagen'=>'dimensions:max_width=500,max_height=500'
+                //El sistema fue actualizado
 
         ];
     }

@@ -5,6 +5,7 @@ use App\Http\Controllers\Contro;
 use App\Http\Controllers\HeladeriaController;
 use App\Http\Controllers\ControladorPrecios;
 use App\Http\Controllers\CursoController;
+use App\Http\Controllers\DocenteController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,9 +16,15 @@ use App\Http\Controllers\CursoController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::resource('docente', DocenteController::class);
+
+Route::get('/docentes/index', function () {
+    return view('docentes.index');
+});
+
+
+
 Route::resource('curso', CursoController::class);
-
-
 
 
 Route::get('/', function () {
