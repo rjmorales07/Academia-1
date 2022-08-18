@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\storeCursoRequest;
+use App\Http\Requests\storeDocenteRequest;
 use App\Models\Curso;
 use Illuminate\Http\Request;
 

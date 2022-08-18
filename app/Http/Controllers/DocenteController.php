@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Docente;
 use Illuminate\Http\Request;
+use App\Http\Requests\storeDocenteRequest;
+
 
 class DocenteController extends Controller
 {
@@ -35,7 +37,7 @@ class DocenteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(storeDocenteRequest $request)
     {
         $docentico = new Docente();//crear una instancia de la clase Docente
         $docentico->nombre=$request->input('nombre');
@@ -44,12 +46,12 @@ class DocenteController extends Controller
         $docentico->edad=$request->input('edad');
         $docentico->fecha=$request->input('fecha');
         if($request->hasFile('foto','documento',)){
-            $docentico->foto = $request->file('foto')->store('public/docentes');
-            $docentico->documento=$request->file('documento')->store('public/docentes');
+            $docentico->foto = $request->file('foto')->store('public/docente');
+            $docentico->documento=$request->file('documento')->store('public/docente');
         }
 
         $docentico->save();
-        return 'guardado';
+        return view('docentes.save');
 
 
     }
@@ -62,7 +64,8 @@ class DocenteController extends Controller
      */
     public function show($id)
     {
-        //
+        $docentico = Docente::find($id);
+        return view('docentes.show', compact('docentico'));
     }
 
     /**
@@ -73,7 +76,8 @@ class DocenteController extends Controller
      */
     public function edit($id)
     {
-        //
+        $docentico = Docente::find($id);
+        return view('docentes.edit', compact('docentico'));
     }
 
     /**
@@ -85,7 +89,14 @@ class DocenteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $docentico = Docente::find($id);
+        $docentico->fill($request->except('foto'));
+        if($request->hasFile('foto')){
+            $docentico->foto = $request->file('foto')->store('public/docente');
+            $docentico->documento = $request->file('documento')->store('public/docente');
+        }
+        $docentico->save();
+        return view('docentes.update');
     }
 
     /**
@@ -96,6 +107,12 @@ class DocenteController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $docentico = Docente::find($id);
+        $urlImagenBD = $docentico->foto;
+        $nombreImagen = str_replace('public/', '\storage\\', $urlImagenBD);
+        $rutaCompleta = public_path(). $nombreImagen;
+        unlink($rutaCompleta);
+        $docentico -> delete();
+        return view('docentes.delete');
     }
 }

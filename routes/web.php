@@ -24,6 +24,7 @@ Route::get('/docentes/index', function () {
 
 
 
+
 Route::resource('curso', CursoController::class);
 
 
